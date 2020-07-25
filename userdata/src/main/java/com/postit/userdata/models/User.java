@@ -1,9 +1,13 @@
 package com.postit.userdata.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,12 +30,24 @@ public class User {
     @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Set<UserSubs> usersubs = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "user", allowSetters = true)
+    private Set<UserRoles> userroles = new HashSet<>();
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
     public User() {
+    }
+
+    public Set<UserRoles> getUserroles() {
+        return userroles;
+    }
+
+    public void setUserroles(Set<UserRoles> userroles) {
+        this.userroles = userroles;
     }
 
     public String getUsername() {
@@ -64,5 +80,15 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @JsonIgnore
+    public List<SimpleGrantedAuthority> getAuthority() {
+        List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
+        for (UserRoles ur : this.userroles) {
+            String roleString = String.format("ROLE_%s", ur.getRole().getName().toUpperCase());
+            rtnList.add(new SimpleGrantedAuthority(roleString));
+        }
+        return rtnList;
     }
 }
