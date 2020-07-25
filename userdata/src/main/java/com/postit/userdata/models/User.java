@@ -2,7 +2,9 @@ package com.postit.userdata.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,11 +22,9 @@ public class User {
 
     private String username;
 
+    @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    public User(String password) {
-        this.password = password;
-    }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
@@ -36,7 +36,8 @@ public class User {
 
     public User(String username, String password) {
         this.username = username;
-        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
     }
 
     public User() {
@@ -78,8 +79,13 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPasswordNoEncrypt(String password) {
         this.password = password;
+    }
+
+    public void setPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
     }
 
     @JsonIgnore

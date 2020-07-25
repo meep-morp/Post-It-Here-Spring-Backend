@@ -28,8 +28,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/v2/api-docs",
                         "/webjars/**",
                         "/users/users").permitAll()
-                .antMatchers("").authenticated()
-                .antMatchers("").hasAnyRole("ADMIN")
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());

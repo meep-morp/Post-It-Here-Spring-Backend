@@ -21,6 +21,14 @@ public class UserRoles implements Serializable {
     @JsonIgnoreProperties(value = "useroles")
    private Role role;
 
+    public UserRoles(User user, Role role) {
+        this.user = user;
+        this.role = role;
+    }
+
+    public UserRoles() {
+    }
+
     public User getUser() {
         return user;
     }
