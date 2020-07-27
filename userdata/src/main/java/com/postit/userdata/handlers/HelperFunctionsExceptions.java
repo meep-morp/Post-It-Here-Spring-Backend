@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class HelperFunctions {
+public class HelperFunctionsExceptions {
 
     public List<ValidationError> getConstraintViolation(Throwable cause) {
         while((cause != null) && !(cause instanceof ConstraintViolationException)) {

@@ -1,6 +1,6 @@
 package com.postit.userdata.exceptions;
 
-import com.postit.userdata.handlers.HelperFunctions;
+import com.postit.userdata.handlers.HelperFunctionsExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class CustomErrorDetails
      * Connects this class with the Helper Functions
      */
     @Autowired
-    private HelperFunctions helper;
+    private HelperFunctionsExceptions helper;
 
     /**
      * Custom method to override the error details provided by Spring Boot. We want to use our own format.

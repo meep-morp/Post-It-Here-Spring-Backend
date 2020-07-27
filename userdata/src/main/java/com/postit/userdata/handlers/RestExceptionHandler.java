@@ -37,7 +37,7 @@ import java.util.Date;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
-    private HelperFunctions helper;
+    private HelperFunctionsExceptions helper;
 
     public RestExceptionHandler() {
         super();
