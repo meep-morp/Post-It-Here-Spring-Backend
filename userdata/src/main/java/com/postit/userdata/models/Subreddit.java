@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "subreddits")
-public class Subreddit {
+public class Subreddit extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

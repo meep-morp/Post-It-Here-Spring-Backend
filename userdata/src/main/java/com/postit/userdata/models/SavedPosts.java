@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "userposts")
-public class SavedPosts implements Serializable {
+public class SavedPosts extends Auditable implements Serializable{
 
     @Id
     @ManyToOne
