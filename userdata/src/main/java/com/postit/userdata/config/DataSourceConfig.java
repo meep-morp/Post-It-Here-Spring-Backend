@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
-//@Configuration
+@Configuration
 public class DataSourceConfig
 {
     @Autowired

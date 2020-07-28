@@ -43,6 +43,7 @@ public class SeedData implements CommandLineRunner {
         postsService.save(p2);
         subredditService.save(s2);
         User fuser =  new User("username", "password");
+        fuser.setAvatar(faker.internet().avatar());
         s2.getSavedposts().add(new SavedPosts(s2,p2));
         fuser.getUsersubs().add(new UserSubs(fuser,s2 ));
         fuser.getUserroles().add(new UserRoles(fuser, user));
@@ -55,6 +56,7 @@ public class SeedData implements CommandLineRunner {
            postsService.save(p1);
            subredditService.save(s1);
            User fakeUser =  new User(faker.pokemon().name(), "password");
+           fakeUser.setAvatar(faker.internet().avatar());
            s1.getSavedposts().add(new SavedPosts(s1,p1));
            fakeUser.getUsersubs().add(new UserSubs(fakeUser,s1 ));
            fakeUser.getUserroles().add(new UserRoles(fakeUser, user));

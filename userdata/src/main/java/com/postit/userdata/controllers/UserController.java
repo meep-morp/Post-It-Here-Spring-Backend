@@ -29,25 +29,6 @@ public class UserController {
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-    @PreAuthorize("permitAll()")
-    @PostMapping(value = "/signup", consumes = "application/json")
-    @Transactional
-    public ResponseEntity<?> postNewUser(@Valid @RequestBody User newuser) {
-        newuser.setUserid(0);
-        newuser = userService.save(newuser);
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{userid}")
-                .buildAndExpand(newuser.getUserid())
-                .toUri();
-        responseHeaders.setLocation(newUserURI);
-
-        return new ResponseEntity<>(null,
-                responseHeaders,
-                HttpStatus.CREATED);
-    }
-
     @GetMapping(value = "/myinfo", produces = "application/json")
     public ResponseEntity<?> getMyInfo() {
         User user = userService.getCurrentUserInfo();

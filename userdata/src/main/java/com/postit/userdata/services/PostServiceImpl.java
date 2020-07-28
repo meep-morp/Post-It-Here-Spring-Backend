@@ -39,6 +39,7 @@ public class PostServiceImpl implements PostsService{
        }
        newPost.setTitle(post.getTitle());
        newPost.setSelftext(post.getSelftext());
+       newPost.setUrl(post.getUrl());
 
        newPost.getSavedposts().clear();
         for (SavedPosts sp : post.getSavedposts()) {

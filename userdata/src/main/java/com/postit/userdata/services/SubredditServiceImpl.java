@@ -1,19 +1,21 @@
 package com.postit.userdata.services;
 
 import com.postit.userdata.exceptions.ResourceNotFoundException;
-import com.postit.userdata.models.SavedPosts;
-import com.postit.userdata.models.Subreddit;
-import com.postit.userdata.models.UserSubs;
+import com.postit.userdata.models.*;
 import com.postit.userdata.repositories.SubredditRepo;
 import com.postit.userdata.repositories.UserRepo;
-import com.pusher.client.Pusher;
-import com.pusher.client.channel.Channel;
-import com.pusher.client.connection.ConnectionEventListener;
-import com.pusher.client.connection.ConnectionState;
-import com.pusher.client.connection.ConnectionStateChange;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.Objects;
 
 
 @Service(value = "subredditService")
@@ -53,29 +55,22 @@ public class SubredditServiceImpl implements SubredditService{
         return subredditRepo.save(subreddit);
     }
 
-    @Override //todo
-    public Subreddit subscribeToSubreddit(String subname) {
-        Pusher pusher = new Pusher("50ed18dd967b455393ed");
+    @Override
+    public RedditApi getPosts(String subname) {
+        String apiUrl = "https://www.reddit.com/r/" + subname + ".json?limit=5";
+        RedditApi newRed = new RedditApi();
 
-        pusher.connect(new ConnectionEventListener() {
-            @Override
-            public void onConnectionStateChange(ConnectionStateChange change) {
-                System.out.println("State changed to " + change.getCurrentState() +
-                        " from " + change.getPreviousState());
-            }
+        RestTemplate restTemplate = new RestTemplate();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
+        restTemplate.getMessageConverters().add(converter);
 
-            @Override
-            public void onError(String message, String code, Exception e) {
-                System.out.println("There was a problem connecting!");
-            }
-        }, ConnectionState.ALL);
+        ParameterizedTypeReference<RedditApi> responseType = new ParameterizedTypeReference<>(){};
+        ResponseEntity<RedditApi> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.GET,null,responseType);
 
-        Channel channel = pusher.subscribe(subname);
-        channel.bind("new-listing", event -> System.out.println("Received event with data: " + event.toString()));
-        pusher.disconnect();
-        pusher.connect();
-
-        return null;
+        newRed.setData(Objects.requireNonNull(responseEntity.getBody()).getData());
+        newRed.setKind(responseEntity.getBody().getKind());
+        return newRed;
     }
 
     @Override
