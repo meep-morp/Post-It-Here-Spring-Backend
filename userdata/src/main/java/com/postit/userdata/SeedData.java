@@ -50,7 +50,7 @@ public class SeedData implements CommandLineRunner {
         userService.save(fuser);
 
         for (int i = 0; i < 20; i++) {
-           Posts p1 =  new Posts(faker.backToTheFuture().date(), faker.rickAndMorty().quote());
+           Posts p1 =  new Posts(faker.backToTheFuture().date(), faker.backToTheFuture().quote());
            Subreddit s1 =  new Subreddit(faker.lordOfTheRings().location(), faker.chuckNorris().fact());
            postsService.save(p1);
            subredditService.save(s1);

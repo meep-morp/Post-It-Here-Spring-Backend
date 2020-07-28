@@ -54,4 +54,18 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/user/{id}", consumes = "application/json")
+    public ResponseEntity<?> updateUserFull(@Valid @RequestBody User newUser, @PathVariable long id) {
+        newUser.setUserid(id);
+        userService.save(newUser);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable long id) {
+        userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
