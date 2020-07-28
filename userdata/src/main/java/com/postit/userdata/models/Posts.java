@@ -1,6 +1,7 @@
 package com.postit.userdata.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,15 +18,15 @@ public class Posts extends Auditable{
     private String title;
 
     @Column(length = 900)
-    private String contents;
+    private String selftext;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "posts")
     private Set<SavedPosts> savedposts = new HashSet<>();
 
-    public Posts(String title, String contents) {
+    public Posts(String title, String selftext) {
         this.title = title;
-        this.contents = contents;
+        this.selftext = selftext;
     }
 
     public Posts() {
@@ -55,11 +56,11 @@ public class Posts extends Auditable{
         this.title = title;
     }
 
-    public String getContents() {
-        return contents;
+    public String getSelftext() {
+        return selftext;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setSelftext(String contents) {
+        this.selftext = contents;
     }
 }

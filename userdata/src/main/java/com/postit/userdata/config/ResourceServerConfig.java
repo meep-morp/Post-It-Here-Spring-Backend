@@ -1,6 +1,7 @@
 package com.postit.userdata.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -28,10 +29,19 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/v2/api-docs",
                         "/webjars/**",
                         "/users/users").permitAll()
-                .antMatchers("/users/myinfo").authenticated()
+                .antMatchers("/users/myinfo", "/logout").authenticated()
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());
+        http.cors().disable()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .anyRequest()
+                .fullyAuthenticated()
+                .and()
+                .httpBasic()
+                .and()
+                .csrf().disable();
         http.csrf().disable();
         http.headers().frameOptions().deny();
         http.logout().disable();
