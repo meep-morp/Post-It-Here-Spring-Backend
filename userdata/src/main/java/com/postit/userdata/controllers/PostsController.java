@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/posts")
 public class PostsController {
@@ -22,4 +24,10 @@ public class PostsController {
         return new ResponseEntity<>(rec, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/save", consumes = "application/json")
+    public ResponseEntity<?> saveNewPost(@Valid @RequestBody Posts posts) {
+        Posts addedPost = postsService.save(posts);
+
+        return new ResponseEntity<>(addedPost, HttpStatus.OK);
+    }
 }

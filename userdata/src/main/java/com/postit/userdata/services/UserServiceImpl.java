@@ -64,6 +64,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User findById(long id) {
+        return userRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", id)));
+    }
+
+    @Override
+    public void delete(long id) {
+        userRepo.deleteById(id);
+    }
+
+    @Override
     public User getCurrentUserInfo() {
         return userRepo.findByUsername(helperFunctions.getCurrentAuditor());
     }

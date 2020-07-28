@@ -6,4 +6,6 @@ public interface SubredditService {
 
     Subreddit save(Subreddit subreddit);
 
+    void delete(long id);
+
 }
