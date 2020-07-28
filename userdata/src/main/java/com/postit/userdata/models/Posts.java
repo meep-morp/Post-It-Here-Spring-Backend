@@ -21,7 +21,7 @@ public class Posts extends Auditable{
     private String selftext;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "posts")
+    @JsonIgnoreProperties(value = "posts", allowSetters = true)
     private Set<SavedPosts> savedposts = new HashSet<>();
 
     public Posts(String title, String selftext) {

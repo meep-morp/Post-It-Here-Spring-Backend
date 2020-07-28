@@ -37,7 +37,6 @@ public class PostServiceImpl implements PostsService{
 
            newPost.setPostid(post.getPostid());
        }
-
        newPost.setTitle(post.getTitle());
        newPost.setSelftext(post.getSelftext());
 
@@ -47,7 +46,7 @@ public class PostServiceImpl implements PostsService{
                     .orElseThrow(() -> new ResourceNotFoundException("Subreddit not found")), sp.getPosts()));
         }
 
-        return  postsRepo.save(newPost);
+        return  postsRepo.save(post);
     }
 
     @Override

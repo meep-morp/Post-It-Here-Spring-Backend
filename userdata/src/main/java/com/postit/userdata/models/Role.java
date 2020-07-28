@@ -1,6 +1,10 @@
 package com.postit.userdata.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -11,6 +15,10 @@ public class Role extends Auditable{
     private long roleid;
 
     private String name;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(value = "role", allowSetters = true)
+    Set<UserRoles> userRoles = new HashSet<>();
 
     public Role(String name) {
         this.name = name;

@@ -41,4 +41,10 @@ public class SubredditController {
         subredditService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping(value = "/subscribe/{subname}", produces = "application/json")
+    public ResponseEntity<?> subscribeToSubPosts(@PathVariable String subname) {
+        subredditService.subscribeToSubreddit(subname);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

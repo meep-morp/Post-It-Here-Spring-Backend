@@ -12,13 +12,13 @@ public class UserSubs extends Auditable implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnoreProperties(value = "usersubs")
+    @JsonIgnoreProperties(value = "usersubs", allowSetters = true)
     private User user;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "subid")
-    @JsonIgnoreProperties(value = "usersubs")
+    @JsonIgnoreProperties(value = "usersubs", allowSetters = true)
     private Subreddit subreddit;
 
     public UserSubs(User user, Subreddit subreddit) {
