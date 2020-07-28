@@ -2,6 +2,7 @@ package com.postit.userdata.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,11 +18,14 @@ public class Posts extends Auditable{
 
     private String title;
 
+    @URL(message = "Must be a valid media URL")
+    private String url;
+
     @Column(length = 900)
     private String selftext;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "posts")
+    @JsonIgnoreProperties(value = "posts", allowSetters = true)
     private Set<SavedPosts> savedposts = new HashSet<>();
 
     public Posts(String title, String selftext) {
@@ -30,6 +34,14 @@ public class Posts extends Auditable{
     }
 
     public Posts() {
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Set<SavedPosts> getSavedposts() {

@@ -117,6 +117,12 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--        PUSHER DEPENDENCY: REDDIT API       -->
+            <dependency>
+                <groupId>com.pusher</groupId>
+                <artifactId>pusher-java-client</artifactId>
+                <version>2.2.3</version>
+            </dependency>
         <!--        Jackson Converter       -->
 <!--        <dependency>-->
 <!--            <groupId>com.fasterxml.jackson.core</groupId>-->

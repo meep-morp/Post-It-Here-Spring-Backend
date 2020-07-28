@@ -25,11 +25,11 @@ public class Subreddit extends Auditable {
     }
 
     @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties(value = "subreddit")
+    @JsonIgnoreProperties(value = "subreddit", allowSetters = true)
     private Set<UserSubs> usersubs = new HashSet<>();
 
-    @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties(value = "subreddit")
+    @OneToMany(mappedBy = "subreddit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties(value = "subreddit", allowSetters = true)
     private Set<SavedPosts> savedposts = new HashSet<>();
 
     public Subreddit() {

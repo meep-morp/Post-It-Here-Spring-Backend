@@ -3,6 +3,7 @@ package com.postit.userdata.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -26,6 +27,9 @@ public class User extends Auditable{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @URL(message = "Avatar must be a valid URL")
+    private String avatar;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "user", allowSetters = true)
     private Set<UserSubs> usersubs = new HashSet<>();
@@ -41,6 +45,14 @@ public class User extends Auditable{
     }
 
     public User() {
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Set<UserRoles> getUserroles() {

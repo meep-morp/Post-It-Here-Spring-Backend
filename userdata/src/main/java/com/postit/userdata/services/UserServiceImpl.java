@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService{
 
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
+        newUser.setAvatar(user.getAvatar());
 
         newUser.getUserroles().clear();
         for(UserRoles u : user.getUserroles()) {
@@ -44,8 +45,6 @@ public class UserServiceImpl implements UserService{
 
             newUser.getUserroles().add(new UserRoles(newUser, newRole));
         }
-
-
 
         return userRepo.save(user);
     }
@@ -70,6 +69,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public void delete(long id) {
         userRepo.deleteById(id);
     }

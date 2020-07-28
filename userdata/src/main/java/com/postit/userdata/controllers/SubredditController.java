@@ -1,5 +1,6 @@
 package com.postit.userdata.controllers;
 
+import com.postit.userdata.models.RedditApi;
 import com.postit.userdata.models.Subreddit;
 import com.postit.userdata.services.SubredditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +41,11 @@ public class SubredditController {
     public ResponseEntity<?> deleteSub(@PathVariable long id) {
         subredditService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getposts/{subname}", produces = "application/json")
+    public ResponseEntity<?> subscribeToSubPosts(@PathVariable String subname) {
+        RedditApi newPosts = subredditService.getPosts(subname);
+        return new ResponseEntity<>(newPosts, HttpStatus.OK);
     }
 }
