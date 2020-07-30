@@ -1,7 +1,9 @@
 package com.postit.userdata.services;
 
 import com.postit.userdata.UserdataApplication;
+import com.postit.userdata.exceptions.ResourceNotFoundException;
 import com.postit.userdata.models.Subreddit;
+import com.postit.userdata.models.User;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
@@ -40,22 +42,30 @@ public class SubredditServiceImplTest {
 
     @Test
     public void a_findAll() {
-        assertEquals(5, subredditService.findAll().size());
+        assertEquals(22, subredditService.findAll().size());
     }
 
     @Test
     public void x_save() {
+        Subreddit newSub = new Subreddit("test", "Test");
+        subredditService.save(newSub);
+
+        assertEquals("test", subredditService.findBySubName("test").getTitle());
     }
 
     @Test
     public void b_findBySubName() {
+        assertEquals(1, subredditService.findBySubName("testtt").getSubid());
     }
 
     @Test
     public void c_findById() {
+        assertEquals("testtt", subredditService.findById(1).getTitle());
     }
 
-    @Test
+    @Test(expected = ResourceNotFoundException.class)
     public void d_delete() {
+        subredditService.delete(1);
+        subredditService.findById(1);
     }
 }

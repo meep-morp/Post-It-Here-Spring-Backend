@@ -14,4 +14,6 @@ public interface PostsService {
     Recommendations findSubreddits(long num, Posts posts);
 
     List<Posts> search(String title);
+
+    List<Posts> findAll();
 }

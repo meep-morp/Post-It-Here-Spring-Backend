@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,5 +75,12 @@ public class PostServiceImpl implements PostsService{
     @Override
     public List<Posts> search(String title) {
         return postsRepo.findByTitleContainingIgnoreCase(title);
+    }
+
+    @Override
+    public List<Posts> findAll() {
+        List<Posts> posts = new ArrayList<>();
+        postsRepo.findAll().iterator().forEachRemaining(posts::add);
+        return posts;
     }
 }

@@ -33,6 +33,12 @@ public class SeedData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        Subreddit testSub = new Subreddit("testtt", "Testtt");
+        subredditService.save(testSub);
+
+        Posts post = new Posts("testtt", "Testtt");
+        postsService.save(post);
+
         Faker faker = new Faker(new Locale("en-US"));
 
         Role user = new Role("User");
