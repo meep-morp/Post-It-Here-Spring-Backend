@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service(value = "postsService")
 public class PostServiceImpl implements PostsService{
@@ -68,5 +69,10 @@ public class PostServiceImpl implements PostsService{
         newRec.setRecommendations(responseEntity.getRecommendations());
 
         return newRec;
+    }
+
+    @Override
+    public List<Posts> search(String title) {
+        return postsRepo.findByTitleContainingIgnoreCase(title);
     }
 }

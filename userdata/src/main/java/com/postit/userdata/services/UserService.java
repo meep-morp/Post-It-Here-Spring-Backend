@@ -1,5 +1,6 @@
 package com.postit.userdata.services;
 
+import com.postit.userdata.models.Subreddit;
 import com.postit.userdata.models.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,9 @@ public interface UserService {
 
     @Transactional
     void delete(long id);
+
+    @Transactional
+    void SaveSubreddit(Subreddit subreddit);
 
     User getCurrentUserInfo();
 }

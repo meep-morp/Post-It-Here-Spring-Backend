@@ -1,15 +1,12 @@
 package com.postit.userdata.services;
 
 import com.postit.userdata.exceptions.ResourceNotFoundException;
-import com.postit.userdata.models.Role;
-import com.postit.userdata.models.User;
-import com.postit.userdata.models.UserRoles;
+import com.postit.userdata.models.*;
 import com.postit.userdata.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +22,25 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private SubredditService subredditService;
+
     @Override
     @Transactional
     public User save(User user) {
         User newUser = new User();
         if (user.getUserid() != 0) {
-            userRepo.findById(user.getUserid())
+            User oldUser = userRepo.findById(user.getUserid())
                     .orElseThrow(() -> new ResourceNotFoundException(String.format("User %s not found.", user.getUserid())));
             newUser.setUserid(user.getUserid());
+            newUser.setPassword(oldUser.getPassword());
+        }
+
+        if (user.getPassword() != null) {
+            newUser.setPassword(user.getPassword());
         }
 
         newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
         newUser.setAvatar(user.getAvatar());
 
         newUser.getUserroles().clear();
@@ -65,13 +69,24 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findById(long id) {
         return userRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", id)));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("User %s not found", id)));
     }
 
     @Override
     @Transactional
     public void delete(long id) {
         userRepo.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void SaveSubreddit(Subreddit subreddit) {
+        Subreddit newSavedSub = new Subreddit(subreddit.getTitle(), subreddit.getDescription());
+        newSavedSub.setSavedposts(subreddit.getSavedposts());
+        subredditService.save(newSavedSub);
+
+        User currentUser = userRepo.findByUsername(helperFunctions.getCurrentAuditor());
+        currentUser.getUsersubs().add(new UserSubs(currentUser, newSavedSub));
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.postit.userdata.controllers;
 
+import com.postit.userdata.models.Posts;
+import com.postit.userdata.models.Subreddit;
 import com.postit.userdata.models.User;
+import com.postit.userdata.services.SubredditService;
 import com.postit.userdata.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +25,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SubredditService subredditService;
+
     @GetMapping(value = "/users", produces = "application/json")
     ResponseEntity<?> getAll() {
         List<User> userList = userService.findAll();
@@ -35,6 +41,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @Transactional
     @PutMapping(value = "/user/{id}", consumes = "application/json")
     public ResponseEntity<?> updateUserFull(@Valid @RequestBody User newUser, @PathVariable long id) {
         newUser.setUserid(id);
@@ -43,10 +50,18 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
     @DeleteMapping(value = "/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Transactional
+    @PostMapping(value = "/subs/save", consumes = "application/json")
+    public ResponseEntity<?> saveSub(@Valid @RequestBody Subreddit subreddit) {
+        userService.SaveSubreddit(subreddit);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

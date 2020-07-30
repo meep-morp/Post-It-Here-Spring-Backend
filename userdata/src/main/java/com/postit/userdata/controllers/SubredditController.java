@@ -1,7 +1,6 @@
 package com.postit.userdata.controllers;
 
-import com.postit.userdata.models.RedditApi;
-import com.postit.userdata.models.Subreddit;
+import com.postit.userdata.models.*;
 import com.postit.userdata.services.SubredditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -47,5 +46,12 @@ public class SubredditController {
     public ResponseEntity<?> subscribeToSubPosts(@PathVariable String subname) {
         RedditApi newPosts = subredditService.getPosts(subname);
         return new ResponseEntity<>(newPosts, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/savepost/{subname}", consumes = "application/json")
+    public ResponseEntity<?> savePost(@Valid @RequestBody Posts posts, @PathVariable String subname) {
+        SavedPosts sp = subredditService.savePost(posts, subname);
+
+        return new ResponseEntity<>(sp, HttpStatus.CREATED);
     }
 }

@@ -3,6 +3,7 @@ package com.postit.userdata.controllers;
 import com.postit.userdata.models.Posts;
 import com.postit.userdata.models.PostsRec;
 import com.postit.userdata.models.Recommendations;
+import com.postit.userdata.models.SavedPosts;
 import com.postit.userdata.services.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -24,10 +26,10 @@ public class PostsController {
         return new ResponseEntity<>(rec, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/save", consumes = "application/json")
-    public ResponseEntity<?> saveNewPost(@Valid @RequestBody Posts posts) {
-        Posts addedPost = postsService.save(posts);
+    @GetMapping(value = "/searchPosts/{search}", produces = "application/json")
+    public ResponseEntity<?> searchPosts(@PathVariable String search) {
+        List<Posts> p = postsService.search(search);
 
-        return new ResponseEntity<>(addedPost, HttpStatus.OK);
+        return new ResponseEntity<>(p, HttpStatus.OK);
     }
 }

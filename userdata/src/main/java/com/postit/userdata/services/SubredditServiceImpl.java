@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -26,6 +28,9 @@ public class SubredditServiceImpl implements SubredditService{
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private PostsService postsService;
 
     @Override
     @Transactional
@@ -56,21 +61,46 @@ public class SubredditServiceImpl implements SubredditService{
     }
 
     @Override
+    public List<Subreddit> findAll() {
+        List<Subreddit> subs = new ArrayList<>();
+        subredditRepo.findAll().iterator().forEachRemaining(subs::add);
+        return subs;
+    }
+
+    @Override
     public RedditApi getPosts(String subname) {
         String apiUrl = "https://www.reddit.com/r/" + subname + ".json?limit=5";
         RedditApi newRed = new RedditApi();
 
         RestTemplate restTemplate = new RestTemplate();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        restTemplate.getMessageConverters().add(converter);
 
         ParameterizedTypeReference<RedditApi> responseType = new ParameterizedTypeReference<>(){};
         ResponseEntity<RedditApi> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.GET,null,responseType);
 
         newRed.setData(Objects.requireNonNull(responseEntity.getBody()).getData());
-        newRed.setKind(responseEntity.getBody().getKind());
         return newRed;
+    }
+
+    @Override
+    public Subreddit findBySubName(String subname) {
+        return subredditRepo.findByTitle(subname);
+    }
+
+    @Override
+    public Subreddit findById(long id) {
+        return subredditRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Subreddit not found"));
+    }
+
+    @Override
+    public SavedPosts savePost(Posts posts, String subname) {
+        Posts newSavedPost = new Posts(posts.getTitle(), posts.getSelftext());
+        postsService.save(newSavedPost);
+
+        Subreddit subreddit = subredditRepo.findByTitle(subname);
+        SavedPosts sp = new SavedPosts(subreddit, newSavedPost);
+        subreddit.getSavedposts().add(sp);
+        return sp;
     }
 
     @Override
@@ -80,4 +110,5 @@ public class SubredditServiceImpl implements SubredditService{
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("Subreddit %s not found", id)));
         subredditRepo.deleteById(id);
     }
+
 }

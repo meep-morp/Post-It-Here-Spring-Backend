@@ -31,7 +31,6 @@ public class UserdataApplication {
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "*", "**"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
         source.registerCorsConfiguration("/**", config);
-        source.registerCorsConfiguration("/login", config);
         return new CorsFilter(source);
     }
 
