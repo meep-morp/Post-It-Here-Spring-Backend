@@ -6,3 +6,7 @@
 <img src="data-shape1.png"
      alt="Data Shape"
      style="float: left; margin-right: 40px;" />
+     
+<img src="DataFlowChart.png"
+     alt="Data Shape"
+     style="float: left; margin-right: 40px;" />
