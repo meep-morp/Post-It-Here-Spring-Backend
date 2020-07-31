@@ -1,11 +1,9 @@
 package com.postit.userdata.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.postit.userdata.UserdataApplication;
-import com.postit.userdata.models.Subreddit;
-import com.postit.userdata.models.User;
-import com.postit.userdata.models.UserSubs;
+import com.postit.userdata.models.*;
+import com.postit.userdata.services.SubredditService;
 import com.postit.userdata.services.UserService;
 import org.junit.After;
 import org.junit.Before;
@@ -33,18 +31,17 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UserdataApplication.class)
-@WithMockUser(username = "username")
-public class UserControllerTest {
+@WithMockUser(username = "admin", roles = {"ADMIN", "DATA"})
+public class SubredditControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     @MockBean
-    private UserService userService;
-    List<User> userList = new ArrayList<>();
+    private SubredditService subredditService;
+    List<User> subList = new ArrayList<>();
 
     private MockMvc mockMvc;
 
@@ -54,73 +51,62 @@ public class UserControllerTest {
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
 
+        Subreddit s1 = new Subreddit("Title", "Desc");
+        s1.setSubid(1);
         User u1 = new User("username", "password");
         u1.setUserid(1);
+        u1.getUsersubs().add(new UserSubs(u1,s1));
 
-        userList.add(u1);
+        subList.add(u1);
     }
+
 
     @After
     public void tearDown() throws Exception {
     }
 
     @Test
-    public void getAll() throws Exception{
-        String apiUrl = "/users/users";
-        Mockito.when(userService.findAll()).thenReturn(userList);
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
-        MvcResult r = mockMvc.perform(rb).andReturn();
-        String tr = r.getResponse().getContentAsString();
+    public void saveSubreddit() throws Exception{
+        String apiUrl = "/subs/save";
         ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(userList);
-        assertEquals(er, tr);
-    }
+        Subreddit s1 = new Subreddit("Titleee", "Desc");
+        s1.setSubid(1);
+        String subString = mapper.writeValueAsString(s1);
 
-    @Test
-    public void getMyInfo() throws Exception{
-        String apiUrl = "/users/myinfo";
-        Mockito.when(userService.getCurrentUserInfo()).thenReturn(userList.get(0));
-        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
-        MvcResult r = mockMvc.perform(rb).andReturn();
-        String tr = r.getResponse().getContentAsString();
-        ObjectMapper mapper = new ObjectMapper();
-        String er = mapper.writeValueAsString(userList.get(0));
-        assertEquals(er, tr);
-    }
-
-    @Test
-    public void updateUserFull() throws Exception {
-        String apiUrl = "/users/user/1";
-        User b3 = new User("meep-morp", "password");
-
-        ObjectMapper mapper = new ObjectMapper();
-        String userString = mapper.writeValueAsString(b3);
-
-        Mockito.when(userService.save(any(User.class))).thenReturn(b3);
+        Mockito.when(subredditService.save(any(Subreddit.class))).thenReturn(s1);
         RequestBuilder rb = MockMvcRequestBuilders.put(apiUrl).accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON).content(userString);
+                .contentType(MediaType.APPLICATION_JSON).content(subString);
         mockMvc.perform(rb).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
     }
 
     @Test
-    public void deleteUser() throws Exception{
-        String apiUrl = "/users/user/1";
+    public void deleteSub() throws Exception{
+        String apiUrl = "/subs/sub/1";
 
         RequestBuilder rb = MockMvcRequestBuilders.delete(apiUrl);
         mockMvc.perform(rb).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
     }
 
     @Test
-    public void saveSub() throws Exception{
-        String apiUrl = "/users/user/1";
+    public void subscribeToSubPosts() throws Exception{
+        String apiUrl = "/subs/getposts/awww";
+        RequestBuilder rb = MockMvcRequestBuilders.get(apiUrl).accept(MediaType.APPLICATION_JSON);
+        MvcResult r = (MvcResult) mockMvc.perform(rb).andExpect(status().isOk());
+    }
+
+    @Test
+    public void savePost() throws Exception{
+        String apiUrl = "/savepost/awww";
+        Posts p1 = new Posts("Post Title", "Selftext");
         User b3 = new User("meep-morp", "password");
-        Subreddit s1 = new Subreddit("Title", "Desc");
+        Subreddit s1 = new Subreddit("awww", "Desc");
         b3.getUsersubs().add(new UserSubs(b3, s1));
+        s1.getSavedposts().add(new SavedPosts(s1, p1));
 
         ObjectMapper mapper = new ObjectMapper();
-        String userString = mapper.writeValueAsString(b3);
+        String userString = mapper.writeValueAsString(s1);
 
-        Mockito.when(userService.save(any(User.class))).thenReturn(b3);
+        Mockito.when(subredditService.save(any(Subreddit.class))).thenReturn(s1);
         RequestBuilder rb = MockMvcRequestBuilders.put(apiUrl).accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON).content(userString);
         mockMvc.perform(rb).andExpect(status().isOk()).andDo(MockMvcResultHandlers.print());
