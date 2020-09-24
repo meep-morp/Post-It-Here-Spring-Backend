@@ -1,4 +1,4 @@
-# Post-It-Here Backend
+<h1 align="center">Post-It-Here Backend :file_cabinet:</h1>
 ## Utilizes Reddit's API and an API for Machine Learning
 ### Generates Subreddits based on a submitted post
 
