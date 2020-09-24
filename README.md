@@ -2,8 +2,7 @@
 ## Utilizes Reddit's API and an API for Machine Learning
 ### Generates Subreddits based on a submitted post
 
-## Documentation
-- https://postit-user-app.herokuapp.com/swagger-ui.html
+<a href="" target="_blank">Documentation</a>
 
 <img src="data-shape1.png"
      alt="Data Shape"
