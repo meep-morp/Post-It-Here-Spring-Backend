@@ -1,6 +1,7 @@
 <h1 align="center">Post-It-Here Backend :file_cabinet:</h1>
-<h2> Utilizes Reddit's API and an API for Machine Learning</h2>
-### Generates Subreddits based on a submitted post
+Utilizes Reddit's API and an API for Machine Learning
+<br />
+Generates Subreddits based on a submitted post
 
 ### Technologies Used :computer:
 - Spring Boot
