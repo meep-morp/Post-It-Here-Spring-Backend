@@ -1,4 +1,6 @@
-# back-end
+# Post-It-Here Backend
+## Utilizes Reddit's API and an API for Machine Learning
+### Generates Subreddits based on a submitted post
 
 ## Documentation
 - https://postit-user-app.herokuapp.com/swagger-ui.html
