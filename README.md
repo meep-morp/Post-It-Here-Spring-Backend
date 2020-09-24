@@ -8,6 +8,8 @@
 - Heroku
 - Swagger Docs
 
+<hr />
+
 <a href="https://postit-user-app.herokuapp.com/swagger-ui.html" target="_blank">Documentation</a>
 
 <img src="data-shape1.png"
