@@ -7,6 +7,7 @@
 - Java
 - Heroku
 - Swagger Docs
+- IntelliJ
 
 <hr />
 
