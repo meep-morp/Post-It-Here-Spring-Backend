@@ -9,6 +9,7 @@ Generates Subreddits based on a submitted post
 - Heroku
 - Swagger Docs
 - IntelliJ
+- JPA Hibernate ORM
 
 <hr />
 
